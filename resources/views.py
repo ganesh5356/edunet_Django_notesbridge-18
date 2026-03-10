@@ -47,8 +47,10 @@ def resource_list(request):
         blob = f'{it.get("title","")} {it.get("subject","")} {it.get("description","")}'.lower()
         if q and q not in blob:
             return False
-        if dept and dept not in it.get("department","").lower():
-            return False
+        if dept and dept != 'all':
+            res_dept = it.get("department", "").lower()
+            if res_dept != dept and res_dept != 'all':
+                return False
         if sem and str(it.get("semester","")) != str(sem):
             return False
         if rtype and it.get("resource_type") != rtype:
@@ -400,20 +402,28 @@ def dashboard(request):
             "my_doubts_resolved": len(my_doubts_resolved),
         }
     
-    # Filtering for recent items if search is used
+    # Filtering for items if search is used
     q = (request.GET.get("q", "") or "").lower()
     dept = (request.GET.get("department", "") or "").lower()
     sem = request.GET.get("semester", "")
     
-    recent_resources = resources
-    if q or dept or sem:
+    is_search = bool(q or dept or sem)
+    display_resources = resources
+
+    if is_search:
         def match(it):
             blob = f'{it.get("title","")} {it.get("subject","")} {it.get("description","")}'.lower()
             if q and q not in blob: return False
-            if dept and dept not in it.get("department","").lower(): return False
+            if dept and dept != 'all':
+                res_dept = it.get("department", "").lower()
+                if res_dept != dept and res_dept != 'all':
+                    return False
             if sem and str(it.get("semester","")) != str(sem): return False
             return True
-        recent_resources = [it for it in resources if match(it)]
+        display_resources = [it for it in resources if match(it)]
+    else:
+        # If no search, just show recent 10
+        display_resources = resources[:10]
 
     return render(
         request,
@@ -421,6 +431,7 @@ def dashboard(request):
         {
             "role": role,
             "stats": stats,
-            "recent_resources": recent_resources[:10],
+            "recent_resources": display_resources,
+            "is_search": is_search,
         }
     )

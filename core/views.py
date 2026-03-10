@@ -27,17 +27,18 @@ def chatbot_api(request):
         })
 
     try:
-        import google.generativeai as genai
+        from google import genai
         data = json.loads(request.body)
         user_message = data.get("message", "")
         
         if not user_message:
             return JsonResponse({"status": "error", "message": "Empty message"})
 
-        genai.configure(api_key=settings.GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        
-        response = model.generate_content(user_message)
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=user_message
+        )
         
         return JsonResponse({
             "status": "success",

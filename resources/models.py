@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Resource(models.Model):
-
+    id = models.CharField(max_length=100, primary_key=True)
     title = models.CharField(max_length=200)
 
     description = models.TextField()
@@ -36,3 +36,24 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.user.username} bookmarked {self.resource.title}"
+
+
+class Doubt(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    subject = models.CharField(max_length=200, null=True, blank=True)
+    question = models.TextField()
+    asked_by = models.CharField(max_length=100)
+    resolved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.subject} - {self.asked_by}"
+
+
+class Download(models.Model):
+    resource_id = models.CharField(max_length=100)
+    user = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} downloaded {self.resource_id}"

@@ -14,6 +14,15 @@ pip install django
 python manage.py migrate
 python manage.py runserver
 ```
+#admin login    
+http://127.0.0.1:8000/admin/
+
+#user login
+http://127.0.0.1:8000/accounts/login/
+
+#to sync db to admin use this cmd
+python manage.py sync_json_to_db
+
 
 Open:
 - http://127.0.0.1:8000/

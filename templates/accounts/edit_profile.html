@@ -12,14 +12,14 @@
 
     <p><b>Role:</b> {{ profile.get_role_display }}</p>
 
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div class="flex flex-col flex-center mb-lg">
         {% if profile.profile_pic %}
         <img src="{{ profile.profile_pic.url }}" class="profile-img">
         {% else %}
-        <div class="profile-avatar" style="margin: 0 auto;">
+        <div class="profile-avatar mb-sm">
             {{ user.username|first|upper }}
         </div>
-        <p class="muted" style="margin-top: 10px; font-size: 0.9rem;">No profile picture uploaded</p>
+        <p class="muted fs-sm mt-sm">No profile picture uploaded</p>
         {% endif %}
     </div>
 

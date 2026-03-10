@@ -11,6 +11,15 @@ TYPE_CHOICES = [
     ("VIDEO", "Video/Lecture"),
 ]
 
+DEPARTMENT_CHOICES = [
+    ("ALL", "All Departments"),
+    ("CSE", "Computer Science"),
+    ("MECH", "Mechanical Engineering"),
+    ("ECE", "Electronics & Communication"),
+    ("EEE", "Electrical & Electronics"),
+    ("CIVIL", "Civil Engineering"),
+]
+
 class ResourceForm(forms.Form):
 
     title = forms.CharField(
@@ -23,9 +32,9 @@ class ResourceForm(forms.Form):
         required=False
     )
 
-    department = forms.CharField(
-        max_length=50,
-        widget=forms.TextInput(attrs={"placeholder": "Department (e.g. CSE, ECE)"})
+    department = forms.ChoiceField(
+        choices=DEPARTMENT_CHOICES,
+        widget=forms.Select(attrs={"class": "w-full p-sm rounded border"})
     )
 
     semester = forms.IntegerField(

@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/chat.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% block extra_head %}{% endblock %}
 </head>
@@ -29,14 +30,14 @@
                 <ul>
                     <li><a href="/resources/dashboard/">Dashboard</a></li>
                     <li><a href="/resources/">Resources</a></li>
-                    {% if role == "junior" %}
+                    {% if role     ==   "junior" %}
                     <li><a href="/resources/bookmarks/">Bookmarks</a></li>
                     <li><a href="/resources/doubts/">Ask Doubts</a></li>
                     <li><a href="{% url 'ask_anything' %}" id="sidebar-ask-anything">Ask anything</a></li>
                     {% else %}
                     <li><a href="/resources/doubts/">Reply Doubts</a></li>
                     {% endif %}
-                    {% if role == "senior" %}
+                    {% if role     ==   "senior" %}
                     <li><a href="/resources/upload/">Upload Resource</a></li>
                     {% endif %}
                 </ul>
@@ -55,7 +56,7 @@
 
             {% if messages %}
             {% for message in messages %}
-            <div class="alert" style="animation: fadeIn 0.5s ease-out;">{{ message }}</div>
+            <div class="alert fade-in">{{ message }}</div>
             {% endfor %}
             {% endif %}
 
@@ -65,6 +66,36 @@
         </div>
 
     </div>
+    <div class="help-chat-wrapper">
+        <button id="chat-trigger" class="chat-trigger" aria-label="Help Chat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </button>
+        <div id="chat-container" class="chat-container">
+            <div class="chat-header">
+                <h3>NotesBridge Helper</h3>
+                <button id="close-chat" class="close-chat">&times;</button>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Ask about NotesBridge...">
+                <button id="send-btn" class="send-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/chat_knowledge.js"></script>
+    <script src="/static/js/chat.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const sidebarToggle = document.querySelector('.sidebar-toggle');

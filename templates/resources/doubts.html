@@ -3,13 +3,13 @@
 
 <div class="card">
 
-    {% if role == "junior" %}
+    {% if role     ==   "junior" %}
     <h2>Ask Doubt</h2>
     {% else %}
     <h2>Reply Doubts</h2>
     {% endif %}
 
-    {% if role == "junior" %}
+    {% if role     ==   "junior" %}
 
     <form method="post">
 
@@ -56,7 +56,7 @@
     {% endif %}
 
 
-    {% if role == "senior" and not d.resolved %}
+    {% if role     ==   "senior" and not d.resolved %}
 
     <form method="post" action="{% url 'reply_doubt' d.id %}">
 
@@ -71,7 +71,7 @@
     {% endif %}
 
 
-    {% if role == "junior" and not d.resolved %}
+    {% if role     ==   "junior" and not d.resolved %}
 
     <form method="post" action="{% url 'resolve_doubt' d.id %}">
 
@@ -96,7 +96,7 @@
     <h3>No doubts yet</h3>
 
     <p class="muted">
-        {% if role == "junior" %}
+        {% if role     ==   "junior" %}
         Ask your first doubt to get help from seniors.
         {% else %}
         Students have not asked any doubts yet.

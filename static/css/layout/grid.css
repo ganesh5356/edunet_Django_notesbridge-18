@@ -46,6 +46,23 @@
   gap: var(--spacing-lg);
 }
 
+.grid-gap-xl {
+  gap: var(--spacing-xl);
+}
+
+/* Specific grids */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
 /* Responsive grids */
 @media (max-width: 1200px) {
   .grid {
@@ -81,7 +98,9 @@
   .grid-3,
   .grid-cols-3,
   .grid-4,
-  .grid-cols-4 {
+  .grid-cols-4,
+  .stats-grid,
+  .resource-grid {
     grid-template-columns: 1fr;
   }
 }

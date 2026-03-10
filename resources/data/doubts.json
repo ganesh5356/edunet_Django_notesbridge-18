@@ -1,5 +1,21 @@
 [
   {
+    "id": "1f48fb80c3d1476ca81c4f96222c16ab",
+    "question": "what is pyhton",
+    "asked_by": "dhanush",
+    "replies": [
+      {
+        "user": "kumar",
+        "message": "Python is a high-level, interpreted, and general-purpose programming language known for its simple, readable syntax, which emphasizes code readability and supports multiple paradigms like object-oriented, procedural, and functional programming"
+      },
+      {
+        "user": "raju",
+        "message": "What is Python programming? - techknowledgehubPython is a high-level, interpreted, and general-purpose programming language known for its simple, readable syntax, which emphasizes code readability and supports multiple paradigms like object-oriented, procedural, and functional programming. It is widely used for web development, data science, AI/machine learning, and automation, making it popular among beginners and professionals alike."
+      }
+    ],
+    "resolved": true
+  },
+  {
     "id": "6b8d9a28a5e54b1aa444838cbd0d00dc",
     "question": "what is python",
     "asked_by": "dhanush",

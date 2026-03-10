@@ -5,7 +5,7 @@
   <p class="muted">Seniors can upload notes/materials with details.</p>
   <form method="post" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
-    <div style="margin-top: 10px; color: var(--text-light); font-size: 0.9em;">
+    <div class="mt-sm text-light fs-sm">
       * You can either upload a file (PDF/Image) or provide an external link (Video/Doc).
     </div>
     <br>

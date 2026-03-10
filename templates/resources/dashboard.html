@@ -8,14 +8,13 @@
     </div>
 </div>
 
-<div class="stats-grid"
-    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
+<div class="stats-grid">
     <div class="card stat-card">
         <div class="stat-number">{{ stats.total_resources }}</div>
         <div class="stat-label">Total Resources</div>
     </div>
 
-    {% if role == "senior" %}
+    {% if role   ==  "senior" %}
     <div class="card stat-card">
         <div class="stat-number text-primary">{{ stats.bookmarks_on_my_notes }}</div>
         <div class="stat-label">Saves on My Notes</div>
@@ -44,8 +43,8 @@
     {% endif %}
 </div>
 
-{% if role == "senior" %}
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl" style="margin-bottom: var(--spacing-xxl);">
+{% if role   ==  "senior" %}
+<div class="grid grid-cols-1 lg:grid-cols-2 grid-gap-xl" style="margin-bottom: var(--spacing-xxl);">
     <div class="card">
         <h3>Download Trends</h3>
         <canvas id="downloadChart" style="max-height: 300px;"></canvas>
@@ -86,49 +85,57 @@
             data: {
                 labels: ['Bookmarks', 'Downloads', 'Comments'],
                 datasets: [{
-                    data: [{{ stats.bookmarks_on_my_notes }}, {{ stats.total_downloads }}, 5],
+                    data: [{{ stats.bookmarks_on_my_notes|default:0 }}, {{ stats.total_downloads|default:0 }}, 5],
             backgroundColor: ['#4f46e5', '#06b6d4', '#8b5cf6']
         }]
-        },
+            },
         options: {
         responsive: true,
         plugins: { legend: { position: 'bottom' } }
     }
+        });
     });
-});
 </script>
 {% endif %}
 
-<div class="card"
-    style="margin-bottom: var(--spacing-xl); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-    <h3 style="margin-bottom: 15px;">Search Resources</h3>
-    <form method="get" action="{% url 'resource_list' %}"
-        style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
-        <div style="flex: 1; min-width: 200px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Keyword</label>
-            <input type="text" name="q" placeholder="Enter title, subject..."
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+<h3 class="mb-md">
+    {% if is_search %}Search Results ({{ recent_resources|length }}){% else %}Recent Resources{% endif %}
+</h3>
+
+<div class="card mb-xl p-lg border">
+    <h3 class="mb-md">Search Resources</h3>
+    <form method="get" action="" class="flex flex-wrap flex-end gap-md">
+        <div class="flex-1 min-w-200">
+            <label class="block fs-sm mb-xs fw-600">Keyword</label>
+            <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Enter title, subject..."
+                class="w-full p-sm rounded border">
         </div>
-        <div style="width: 150px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Department</label>
-            <input type="text" name="department" placeholder="CSE, ECE..."
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="w-150">
+            <label class="block fs-sm mb-xs fw-600">Department</label>
+            <select name="department" class="w-full p-sm rounded border">
+                <option value="ALL" {% if request.GET.department  == 'ALL' %}selected{% endif %}>All Departments</option>
+                <option value="CSE" {% if request.GET.department  == 'CSE' %}selected{% endif %}>CSE</option>
+                <option value="MECH" {% if request.GET.department  == 'MECH' %}selected{% endif %}>Mech</option>
+                <option value="ECE" {% if request.GET.department  == 'ECE' %}selected{% endif %}>ECE</option>
+                <option value="EEE" {% if request.GET.department  == 'EEE' %}selected{% endif %}>EEE</option>
+                <option value="CIVIL" {% if request.GET.department  == 'CIVIL' %}selected{% endif %}>CIVIL</option>
+            </select>
         </div>
-        <div style="width: 100px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Semester</label>
-            <select name="semester"
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="w-100">
+            <label class="block fs-sm mb-xs fw-600">Semester</label>
+            <select name="semester" class="w-full p-sm rounded border">
                 <option value="">All</option>
                 {% for i in "12345678"|make_list %}
-                <option value="{{ i }}">{{ i }}</option>
+                <option value="{{ i }}" {% if request.GET.semester  == i %}selected{% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" style="height: 42px;">Search Resources</button>
+        <button type="submit" class="btn btn-primary h-42">Search</button>
+        {% if is_search %}
+        <a href="{% url 'dashboard' %}" class="btn h-42 flex flex-center border">Clear</a>
+        {% endif %}
     </form>
 </div>
-
-<h3 style="margin-bottom: var(--spacing-md);">Recent Resources</h3>
 <div class="resource-grid">
     {% for it in recent_resources %}
     <div class="card resource-card">
@@ -137,6 +144,10 @@
             <p class="muted">{{ it.department }} • Sem {{ it.semester }}</p>
             <span class="tag">{{ it.resource_type }}</span>
         </a>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xxl);">
+        <p class="muted">No resources found matching your search.</p>
     </div>
     {% endfor %}
 </div>

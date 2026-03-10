@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from django.conf import settings
+from django.contrib.auth.models import User
 
 DATA_FILE = Path(settings.BASE_DIR) / "resources" / "data" / "resources.json"
 BOOKMARK_FILE = Path(settings.BASE_DIR) / "resources" / "data" / "bookmarks.json"
@@ -17,6 +18,13 @@ def load_downloads():
 
 def save_downloads(items):
     DOWNLOAD_FILE.write_text(json.dumps(items, indent=2), encoding="utf-8")
+    # Sync to DB
+    from .models import Download
+    for it in items:
+        Download.objects.get_or_create(
+            resource_id=it.get("resource_id"),
+            user=it.get("user")
+        )
 
 
 def load_resources():
@@ -28,6 +36,25 @@ def load_resources():
 
 def save_resources(items):
     DATA_FILE.write_text(json.dumps(items, indent=2), encoding="utf-8")
+    # Sync to DB
+    from .models import Resource
+    for it in items:
+        user = User.objects.filter(username=it.get("uploaded_by")).first()
+        if not user:
+            user = User.objects.filter(is_superuser=True).first()
+        Resource.objects.update_or_create(
+            id=it.get("id"),
+            defaults={
+                "title": it.get("title"),
+                "description": it.get("description"),
+                "department": it.get("department"),
+                "semester": it.get("semester"),
+                "subject": it.get("subject"),
+                "resource_type": it.get("resource_type"),
+                "file": it.get("file_path", ""),
+                "uploaded_by": user,
+            }
+        )
 
 
 def load_bookmarks():
@@ -39,6 +66,13 @@ def load_bookmarks():
 
 def save_bookmarks(items):
     BOOKMARK_FILE.write_text(json.dumps(items, indent=2), encoding="utf-8")
+    # Sync to DB
+    from .models import Bookmark, Resource
+    for it in items:
+        user = User.objects.filter(username=it.get("user")).first()
+        resource = Resource.objects.filter(id=it.get("resource_id")).first()
+        if user and resource:
+            Bookmark.objects.get_or_create(user=user, resource=resource)
 
 
 def load_doubts():
@@ -58,3 +92,15 @@ def load_doubts():
 
 def save_doubts(items):
     DOUBT_FILE.write_text(json.dumps(items, indent=2), encoding="utf-8")
+    # Sync to DB
+    from .models import Doubt
+    for it in items:
+        Doubt.objects.update_or_create(
+            id=it.get("id"),
+            defaults={
+                "subject": it.get("subject", ""),
+                "question": it.get("question"),
+                "asked_by": it.get("asked_by") or it.get("user") or "unknown",
+                "resolved": it.get("resolved", False),
+            }
+        )

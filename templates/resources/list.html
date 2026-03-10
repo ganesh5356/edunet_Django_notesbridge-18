@@ -1,40 +1,46 @@
 {% extends "dashboard_base.html" %}
 {% block content %}
 
-<div class="page-head" style="margin-bottom: var(--spacing-xl);">
+<div class="page-head mb-md">
     <h2>Resources</h2>
-    <form method="get" class="card"
-        style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-        <div style="flex: 1; min-width: 200px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Search</label>
+</div>
+
+<div class="card mb-xl p-lg border">
+    <form method="get" class="flex flex-wrap flex-end gap-md">
+        <div class="flex-1 min-w-200">
+            <label class="block fs-sm mb-xs fw-600">Search</label>
             <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search title, subject..."
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                class="w-full p-sm rounded border">
         </div>
-        <div style="width: 150px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Department</label>
-            <input type="text" name="department" value="{{ request.GET.department|default:'' }}"
-                placeholder="CSE, ECE..."
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="w-150">
+            <label class="block fs-sm mb-xs fw-600">Department</label>
+            <select name="department" class="w-full p-sm rounded border">
+                <option value="">All</option>
+                <option value="ALL" {% if request.GET.department  == 'ALL' %}selected{% endif %}>All Departments</option>
+                <option value="CSE" {% if request.GET.department  == 'CSE' %}selected{% endif %}>CSE</option>
+                <option value="MECH" {% if request.GET.department  == 'MECH' %}selected{% endif %}>Mech</option>
+                <option value="ECE" {% if request.GET.department  == 'ECE' %}selected{% endif %}>ECE</option>
+                <option value="EEE" {% if request.GET.department  == 'EEE' %}selected{% endif %}>EEE</option>
+                <option value="CIVIL" {% if request.GET.department  == 'CIVIL' %}selected{% endif %}>CIVIL</option>
+            </select>
         </div>
-        <div style="width: 100px;">
-            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Semester</label>
-            <select name="semester"
-                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        <div class="w-100">
+            <label class="block fs-sm mb-xs fw-600">Semester</label>
+            <select name="semester" class="w-full p-sm rounded border">
                 <option value="">All</option>
                 {% for i in "12345678"|make_list %}
-                <option value="{{ i }}" {% if request.GET.semester == i %}selected{% endif %}>{{ i }}</option>
+                <option value="{{ i }}" {% if request.GET.semester  == i %}selected{% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" style="height: 42px;">Filter</button>
-        <a href="{% url 'resource_list' %}" class="btn"
-            style="height: 42px; display: flex; align-items: center;">Clear</a>
+        <button type="submit" class="btn btn-primary h-42">Filter</button>
+        <a href="{% url 'resource_list' %}" class="btn h-42 flex flex-center border">Clear</a>
     </form>
 </div>
 
 {% if items %}
 
-<div class="grid">
+<div class="resource-grid">
 
     {% for it in items %}
 
@@ -52,11 +58,11 @@
 
         </a>
 
-        {% if role == "junior" %}
+        {% if role   ==  "junior" %}
 
         {% for b in bookmarks %}
 
-        {% if b.user == request.user.username and b.resource_id == it.id %}
+        {% if b.user   ==  request.user.username and b.resource_id == it.id %}
 
         <a class="btn" href="/resources/remove-bookmark/{{ it.id }}/">
             ⭐ Bookmarked

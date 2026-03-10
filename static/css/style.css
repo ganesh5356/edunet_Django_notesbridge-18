@@ -9,6 +9,7 @@
 @import url('components/card.css');
 @import url('components/alert.css');
 @import url('components/forms.css');
+@import url('components/utilities.css');
 
 /* Layout */
 @import url('layout/nav.css');
