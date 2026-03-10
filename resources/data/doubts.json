@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6b8d9a28a5e54b1aa444838cbd0d00dc",
+    "question": "what is python",
+    "asked_by": "dhanush",
+    "replies": [
+      {
+        "user": "kumar",
+        "message": "Python is a high-level, interpreted, and general-purpose programming language known for its simple, easy-to-read syntax that emphasizes readability."
+      }
+    ],
+    "resolved": true
+  },
+  {
+    "id": "ea1aa7f3ef544323a9cd2c33aeacd8fc",
+    "question": "what is java",
+    "asked_by": "dhanush",
+    "replies": [
+      {
+        "user": "kumar",
+        "message": "Java is a popular, high-level, and object-oriented programming language designed by Sun Microsystems (now Oracle) in 1995. It is designed to be platform-independent, meaning code written once can run on any device (computer, phone, server) equipped with a Java Virtual Machine (JVM). It is widely used for web, mobile, and enterprise applications."
+      },
+      {
+        "user": "raju",
+        "message": "Java is a popular, high-level, and object-oriented programming language designed to be platform-independent, meaning code written once can run on any device (Write Once, Run Anywhere - WORA). It is widely used to build mobile apps (Android), web apps, enterprise software, and big data applications."
+      }
+    ],
+    "resolved": true
+  },
+  {
+    "id": "d8cdc087e712436cac8af6b2bfdba2ba",
+    "question": "hello",
+    "asked_by": "Ganesh",
+    "replies": [
+      {
+        "user": "kumar",
+        "message": "hi"
+      }
+    ],
+    "resolved": false
+  }
+]

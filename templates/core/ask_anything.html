@@ -1,0 +1,202 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<div class="card"
+    style="height: 75vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 24px; box-shadow: var(--shadow-lg);">
+    <div
+        style="background: var(--primary); color: white; padding: 25px 35px; display: flex; align-items: center; gap: 15px;">
+        <div style="font-size: 32px;">🤖</div>
+        <div>
+            <h2
+                style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">
+                Ask anything</h2>
+            <p style="margin: 0; opacity: 0.9; font-size: 14px;">Powered by Gemini 2.5 Flash</p>
+        </div>
+    </div>
+
+    <div id="chat-content"
+        style="flex: 1; padding: 35px; overflow-y: auto; background: #fdfdfd; display: flex; flex-direction: column; gap: 20px;">
+        <div
+            style="background: white; padding: 20px 25px; border-radius: 20px; border-bottom-left-radius: 4px; max-width: 80%; box-shadow: var(--shadow-sm); font-size: 15px; color: var(--text-dark); border: 1px solid var(--border); align-self: flex-start; line-height: 1.6;">
+            Hello! I'm your AI academic assistant. You can ask me anything about your subjects, notes, or even for
+            general study advice. How can I help you today?
+        </div>
+    </div>
+
+    <div
+        style="padding: 25px 35px; background: white; border-top: 1px solid var(--border); display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="chat-input" placeholder="Type your academic question here..."
+            style="flex: 1; padding: 18px 25px; border-radius: 50px; border: 2px solid var(--border); font-size: 16px; transition: all 0.3s ease; outline: none; background: #f8f9fa;">
+        <button id="send-btn" class="btn btn-primary"
+            style="padding: 15px 35px; border-radius: 50px; font-weight: 700; transform: translateY(0); transition: all 0.3s ease;">
+            Ask AI
+        </button>
+    </div>
+</div>
+
+<style>
+    #chat-input:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    /* Custom scrollbar for chat */
+    #chat-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #chat-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #chat-content::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
+
+    #chat-content::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+    }
+
+    .typing-indicator {
+        font-style: italic;
+        color: var(--text-light);
+        font-size: 13px;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .typing-dot {
+        width: 4px;
+        height: 4px;
+        background: var(--text-light);
+        border-radius: 50%;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+
+        0%,
+        60%,
+        100% {
+            transform: translateY(0);
+        }
+
+        30% {
+            transform: translateY(-4px);
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sendBtn = document.getElementById('send-btn');
+        const chatInput = document.getElementById('chat-input');
+        const chatContent = document.getElementById('chat-content');
+
+        function addMessage(text, isUser = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.style.padding = '20px 25px';
+            msgDiv.style.borderRadius = '20px';
+            msgDiv.style.fontSize = '15px';
+            msgDiv.style.boxShadow = 'var(--shadow-sm)';
+            msgDiv.style.lineHeight = '1.6';
+            msgDiv.style.maxWidth = '80%';
+
+            if (isUser) {
+                msgDiv.style.background = 'var(--primary)';
+                msgDiv.style.color = 'white';
+                msgDiv.style.alignSelf = 'flex-end';
+                msgDiv.style.borderBottomRightRadius = '4px';
+                msgDiv.style.transform = 'translateX(20px)';
+                msgDiv.style.opacity = '0';
+            } else {
+                msgDiv.style.background = 'white';
+                msgDiv.style.color = 'var(--text-dark)';
+                msgDiv.style.alignSelf = 'flex-start';
+                msgDiv.style.borderBottomLeftRadius = '4px';
+                msgDiv.style.border = '1px solid var(--border)';
+                msgDiv.style.transform = 'translateX(-20px)';
+                msgDiv.style.opacity = '0';
+            }
+
+            // Handle markdown-like line breaks
+            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            chatContent.appendChild(msgDiv);
+
+            // Animation
+            requestAnimationFrame(() => {
+                msgDiv.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                msgDiv.style.transform = 'translateX(0)';
+                msgDiv.style.opacity = '1';
+            });
+
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, true);
+            chatInput.value = '';
+
+            // Disable interactions
+            sendBtn.disabled = true;
+            chatInput.disabled = true;
+
+            // Show typing indicator
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.innerHTML = 'Gemini 2.5 Flash is thinking <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            chatContent.appendChild(typing);
+            chatContent.scrollTop = chatContent.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                chatContent.removeChild(typing);
+
+                if (data.status === 'success') {
+                    addMessage(data.response);
+                } else {
+                    addMessage('⚠️ ' + data.message);
+                }
+            } catch (error) {
+                chatContent.removeChild(typing);
+                addMessage('❌ Connection error. Please make sure the server is healthy and try again.');
+            } finally {
+                sendBtn.disabled = false;
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        if (sendBtn) {
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+    });
+</script>
+
+{% endblock %}

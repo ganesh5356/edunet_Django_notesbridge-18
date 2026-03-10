@@ -1,0 +1,47 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+<h2>My Profile</h2>
+
+<div class="card">
+
+    <p><b>Username:</b> {{ user.username }}</p>
+
+    <p><b>Email:</b> {{ user.email }}</p>
+
+    <p><b>Role:</b> {{ profile.get_role_display }}</p>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        {% if profile.profile_pic %}
+        <img src="{{ profile.profile_pic.url }}" class="profile-img">
+        {% else %}
+        <div class="profile-avatar" style="margin: 0 auto;">
+            {{ user.username|first|upper }}
+        </div>
+        <p class="muted" style="margin-top: 10px; font-size: 0.9rem;">No profile picture uploaded</p>
+        {% endif %}
+    </div>
+
+    <p><b>Bio:</b> {{ profile.bio }}</p>
+
+</div>
+
+
+<div class="card">
+
+    <h3>Edit Profile</h3>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button class="btn btn-primary">Update Profile</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

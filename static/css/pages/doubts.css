@@ -1,0 +1,225 @@
+/* Doubts Pages */
+.doubts-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.doubt-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doubt-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary);
+}
+
+.doubt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.doubt-author {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+.author-info h4 {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--primary);
+}
+
+.author-info p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.doubt-status {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.status-open {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-answered {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-closed {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.doubt-content {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+.doubt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.tag {
+  background: var(--secondary);
+  color: var(--text-dark);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 16px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.doubt-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.doubt-stats {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.reply-section {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border);
+}
+
+.reply-card {
+  background: var(--secondary);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.reply-author {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.reply-time {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.reply-content {
+  line-height: 1.6;
+}
+
+.reply-form {
+  background: white;
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.reply-form .form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.reply-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Ask doubt form */
+.ask-doubt-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.ask-doubt-form .form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.ask-doubt-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .doubt-header {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .doubt-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .doubt-stats {
+    justify-content: center;
+  }
+
+  .reply-section {
+    margin-left: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .doubt-card {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .ask-doubt-form {
+    margin: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .reply-form {
+    padding: var(--spacing-md);
+  }
+}

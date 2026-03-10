@@ -1,0 +1,73 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<div class="resource-detail">
+  <div class="resource-header">
+    <h1 class="resource-title">{{ item.title }}</h1>
+    <div class="resource-meta">
+      <span>{{ item.department }} • Sem {{ item.semester }} • {{ item.subject }}</span>
+    </div>
+    <p class="resource-description">{{ item.description }}</p>
+  </div>
+
+  <div class="resource-info grid grid-cols-2">
+    <div class="info-item">
+      <div class="info-label">Type</div>
+      <div class="info-value">{{ item.resource_type }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Uploaded by</div>
+      <div class="info-value">{{ item.uploaded_by }}</div>
+    </div>
+  </div>
+
+  <div class="resource-preview card">
+    <h3>Preview</h3>
+    {% if ".pdf" in item.file_url|lower %}
+    <iframe src="{{ request.scheme }}://{{ request.get_host }}{{ item.file_url }}" width="100%" height="700"
+      style="border: none; border-radius: 12px; box-shadow: var(--shadow-sm);"></iframe>
+    {% elif ".png" in item.file_url|lower or ".jpg" in item.file_url|lower or ".jpeg" in item.file_url|lower %}
+    <img src="{{ item.file_url }}" style="max-width:100%; border-radius: 8px;" alt="Resource preview">
+    {% elif ".docx" in item.file_url|lower or ".pptx" in item.file_url|lower or ".xlsx" in item.file_url|lower %}
+    <div class="preview-placeholder"
+      style="padding: var(--spacing-xl); text-align: center; background: #f8f9fa; border-radius: 8px; border: 2px dashed var(--border);">
+      <p class="mb-2"><strong>Previewing Document</strong></p>
+      {% if "127.0.0.1" in request.get_host or "localhost" in request.get_host %}
+      <div class="alert alert-info" style="font-size: 0.9rem; margin-bottom: var(--spacing-md);">
+        Note: Document previews (Word/PPT) require a live website to work with Google Viewer. Since you are on
+        <strong>localhost</strong>, please download the file to view it.
+      </div>
+      {% else %}
+      <iframe
+        src="https://docs.google.com/viewer?url={{ request.scheme }}://{{ request.get_host }}{{ item.file_url }}&embedded=true"
+        width="100%" height="600" style="border: none;"></iframe>
+      {% endif %}
+      <a href="/resources/download/{{ item.id }}/" class="btn btn-outline">Download to View Content</a>
+    </div>
+    {% elif ".mp4" in item.file_url|lower %}
+    <video controls width="100%" class="resource-video" style="border-radius: 8px;">
+      <source src="{{ item.file_url }}" type="video/mp4">
+    </video>
+    {% elif ".mp3" in item.file_url|lower %}
+    <audio controls class="resource-audio" style="width: 100%;">
+      <source src="{{ item.file_url }}" type="audio/mpeg">
+    </audio>
+    {% else %}
+    <div class="preview-unavailable"
+      style="padding: var(--spacing-lg); text-align: center; background: #fff5f5; color: #c53030; border-radius: 8px;">
+      <p>Direct preview not available for <strong>{{ item.resource_type }}</strong>.</p>
+      <p style="font-size: 0.9em;">Please download the file to view its full content.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="resource-actions">
+    <a class="btn btn-primary" href="/resources/download/{{ item.id }}/">Download Resource</a>
+    {% if role == "junior" %}
+    <a class="btn btn-outline" href="/resources/bookmark/{{ item.id }}/">⭐ Add Bookmark</a>
+    <a class="btn btn-outline" href="/resources/remove-bookmark/{{ item.id }}/">❌ Remove Bookmark</a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

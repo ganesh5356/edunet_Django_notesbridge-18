@@ -1,0 +1,229 @@
+/* Resources Pages */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+}
+
+.resource-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary);
+}
+
+.resource-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: var(--secondary);
+}
+
+.resource-content {
+  padding: var(--spacing-lg);
+}
+
+.resource-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  font-family: var(--font-heading);
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-dark);
+}
+
+.resource-meta {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.resource-description {
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+}
+
+.resource-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.filters {
+  background: var(--bg-card);
+  padding: var(--spacing-xl);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-xl);
+  animation: fadeIn 0.8s ease-out;
+}
+
+.filter-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.filter-label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+}
+
+.filter-select {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+}
+
+/* Detail page */
+.resource-detail {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.resource-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.resource-preview {
+  background: white;
+  padding: var(--spacing-lg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-xl);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.resource-iframe,
+.resource-video,
+.resource-audio {
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+}
+
+.resource-video,
+.resource-audio {
+  max-width: 100%;
+  height: auto;
+}
+
+.resource-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.info-item {
+  background: var(--secondary);
+  padding: var(--spacing-md);
+  border-radius: 8px;
+}
+
+.info-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.info-value {
+  font-weight: 500;
+  color: var(--primary);
+}
+
+/* Upload page */
+.upload-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: var(--spacing-xl);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--accent);
+  background: rgba(0, 123, 255, 0.05);
+}
+
+.upload-area.dragover {
+  border-color: var(--accent);
+  background: rgba(0, 123, 255, 0.1);
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.upload-text {
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.upload-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .resource-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .resource-info {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-preview {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-form {
+    margin: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .upload-area {
+    padding: var(--spacing-lg);
+  }
+}

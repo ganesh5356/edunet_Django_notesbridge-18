@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NotesBridge | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+
+        <div class="sidebar">
+
+            <h2 class="logo">NotesBridge</h2>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/resources/dashboard/">Dashboard</a></li>
+                    <li><a href="/resources/">Resources</a></li>
+                    {% if role == "junior" %}
+                    <li><a href="/resources/bookmarks/">Bookmarks</a></li>
+                    <li><a href="/resources/doubts/">Ask Doubts</a></li>
+                    <li><a href="{% url 'ask_anything' %}" id="sidebar-ask-anything">Ask anything</a></li>
+                    {% else %}
+                    <li><a href="/resources/doubts/">Reply Doubts</a></li>
+                    {% endif %}
+                    {% if role == "senior" %}
+                    <li><a href="/resources/upload/">Upload Resource</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <nav class="sidebar-account">
+                <ul>
+                    <li><a href="/accounts/edit-profile/">Profile</a></li>
+                    <li><a href="/accounts/logout/">Logout</a></li>
+                </ul>
+            </nav>
+
+        </div>
+
+        <div class="main">
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert" style="animation: fadeIn 0.5s ease-out;">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const dashboard = document.querySelector('.dashboard');
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('open');
+                    dashboard.classList.toggle('sidebar-open');
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

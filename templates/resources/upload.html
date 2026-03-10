@@ -1,0 +1,15 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+<div class="card upload-form">
+  <h2>Upload Resource</h2>
+  <p class="muted">Seniors can upload notes/materials with details.</p>
+  <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <div style="margin-top: 10px; color: var(--text-light); font-size: 0.9em;">
+      * You can either upload a file (PDF/Image) or provide an external link (Video/Doc).
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit">Upload Resource</button>
+  </form>
+</div>
+{% endblock %}

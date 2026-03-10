@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cb5ab809aa914172a58f2251726e49fa",
+    "title": "engineering mechnaics",
+    "description": "mechanics",
+    "department": "Mech",
+    "semester": 3,
+    "subject": "Eng Mechanics",
+    "resource_type": "BOOK",
+    "file_url": "/media/uploads/a970c3340ee340aca86cd5c846ebce38.pdf",
+    "uploaded_by": "santosh"
+  },
+  {
+    "id": "5424ec79e1064fa9921d76cea3eac32b",
+    "title": "Engineering maths",
+    "description": "maths notes with solutions",
+    "department": "CSE",
+    "semester": 2,
+    "subject": "Engineering mathemetics",
+    "resource_type": "NOTES",
+    "file_url": "/media/uploads/c5b22d9961ed422fb870d1c2069e47f9.pdf",
+    "uploaded_by": "vishnu"
+  }
+]

@@ -1,0 +1,89 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<div class="page-head" style="margin-bottom: var(--spacing-xl);">
+    <h2>Resources</h2>
+    <form method="get" class="card"
+        style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+        <div style="flex: 1; min-width: 200px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Search</label>
+            <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search title, subject..."
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        </div>
+        <div style="width: 150px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Department</label>
+            <input type="text" name="department" value="{{ request.GET.department|default:'' }}"
+                placeholder="CSE, ECE..."
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        </div>
+        <div style="width: 100px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Semester</label>
+            <select name="semester"
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                <option value="">All</option>
+                {% for i in "12345678"|make_list %}
+                <option value="{{ i }}" {% if request.GET.semester == i %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="height: 42px;">Filter</button>
+        <a href="{% url 'resource_list' %}" class="btn"
+            style="height: 42px; display: flex; align-items: center;">Clear</a>
+    </form>
+</div>
+
+{% if items %}
+
+<div class="grid">
+
+    {% for it in items %}
+
+    <div class="card resource-card">
+
+        <a class="linkcard" href="/resources/{{ it.id }}/">
+
+            <h3>{{ it.title }}</h3>
+
+            <p class="muted">
+                {{ it.department }} • Sem {{ it.semester }} • {{ it.subject }}
+            </p>
+
+            <span class="tag">{{ it.resource_type }}</span>
+
+        </a>
+
+        {% if role == "junior" %}
+
+        {% for b in bookmarks %}
+
+        {% if b.user == request.user.username and b.resource_id == it.id %}
+
+        <a class="btn" href="/resources/remove-bookmark/{{ it.id }}/">
+            ⭐ Bookmarked
+        </a>
+
+        {% endif %}
+
+        {% endfor %}
+
+        <a class="btn btn-primary" href="/resources/bookmark/{{ it.id }}/">
+            ⭐ Bookmark
+        </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty card">
+    <h3>No resources found</h3>
+</div>
+
+{% endif %}
+
+{% endblock %}

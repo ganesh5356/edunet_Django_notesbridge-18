@@ -1,0 +1,110 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<div class="card">
+
+    {% if role == "junior" %}
+    <h2>Ask Doubt</h2>
+    {% else %}
+    <h2>Reply Doubts</h2>
+    {% endif %}
+
+    {% if role == "junior" %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <textarea name="question" placeholder="Ask your doubt..." required></textarea>
+
+        <br><br>
+
+        <button class="btn btn-primary">Post Doubt</button>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+<br>
+
+{% if doubts %}
+
+{% for d in doubts %}
+
+<div class="card doubt-card">
+
+    <p><b>{{ d.asked_by }}</b> asked:</p>
+
+    <p>{{ d.question }}</p>
+
+    {% if d.resolved %}
+    <p class="resolved"><b>✔ Resolved</b></p>
+    {% endif %}
+
+    <hr>
+
+    {% if d.replies %}
+    {% for r in d.replies %}
+    <div class="reply">
+        <p><b>{{ r.user }}</b>: {{ r.message }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="muted">No replies yet.</p>
+    {% endif %}
+
+
+    {% if role == "senior" and not d.resolved %}
+
+    <form method="post" action="{% url 'reply_doubt' d.id %}">
+
+        {% csrf_token %}
+
+        <input name="message" placeholder="Reply to doubt" required>
+
+        <button class="btn btn-primary">Reply</button>
+
+    </form>
+
+    {% endif %}
+
+
+    {% if role == "junior" and not d.resolved %}
+
+    <form method="post" action="{% url 'resolve_doubt' d.id %}">
+
+        {% csrf_token %}
+
+        <button class="btn btn-outline">Resolve Doubt</button>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+<br>
+
+{% endfor %}
+
+{% else %}
+
+<div class="card">
+
+    <h3>No doubts yet</h3>
+
+    <p class="muted">
+        {% if role == "junior" %}
+        Ask your first doubt to get help from seniors.
+        {% else %}
+        Students have not asked any doubts yet.
+        {% endif %}
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<h2>My Bookmarks</h2>
+
+{% if items %}
+
+<div class="grid">
+
+    {% for it in items %}
+
+    <a class="card resource-card linkcard" href="/resources/{{ it.id }}/">
+
+        <h3>{{ it.title }}</h3>
+
+        <p class="muted">
+            {{ it.department }} • Sem {{ it.semester }} • {{ it.subject }}
+        </p>
+
+        <span class="tag">{{ it.resource_type }}</span>
+
+    </a>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<p>No bookmarks yet.</p>
+
+{% endif %}
+
+{% endblock %}

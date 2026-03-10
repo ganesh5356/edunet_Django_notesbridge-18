@@ -1,0 +1,144 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+
+<div class="page-head">
+    <div>
+        <h2>Analytics Dashboard</h2>
+        <p class="muted">Viewing as <strong>{{ role|capfirst }}</strong></p>
+    </div>
+</div>
+
+<div class="stats-grid"
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
+    <div class="card stat-card">
+        <div class="stat-number">{{ stats.total_resources }}</div>
+        <div class="stat-label">Total Resources</div>
+    </div>
+
+    {% if role == "senior" %}
+    <div class="card stat-card">
+        <div class="stat-number text-primary">{{ stats.bookmarks_on_my_notes }}</div>
+        <div class="stat-label">Saves on My Notes</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number text-success">{{ stats.total_downloads }}</div>
+        <div class="stat-label">My Note Downloads</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">{{ stats.total_doubts_asked }}</div>
+        <div class="stat-label">Unresolved Doubts</div>
+    </div>
+    {% else %}
+    <div class="card stat-card">
+        <div class="stat-number text-primary">{{ stats.my_bookmarks }}</div>
+        <div class="stat-label">My Bookmarks</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number text-secondary">{{ stats.my_downloads }}</div>
+        <div class="stat-label">My Downloads</div>
+    </div>
+    <div class="card stat-card" title="{{ stats.my_doubts_resolved }} of {{ stats.my_doubts_asked }} resolved">
+        <div class="stat-number">{{ stats.my_doubts_resolved }}/{{ stats.my_doubts_asked }}</div>
+        <div class="stat-label">Doubts Resolved</div>
+    </div>
+    {% endif %}
+</div>
+
+{% if role == "senior" %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl" style="margin-bottom: var(--spacing-xxl);">
+    <div class="card">
+        <h3>Download Trends</h3>
+        <canvas id="downloadChart" style="max-height: 300px;"></canvas>
+    </div>
+    <div class="card">
+        <h3>Engagement Overview</h3>
+        <canvas id="engagementChart" style="max-height: 300px;"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('downloadChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Downloads per Day',
+                    data: [12, 19, 3, 5, 2, 3, 9],
+                    borderColor: '#4f46e5',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        const ctx2 = document.getElementById('engagementChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bookmarks', 'Downloads', 'Comments'],
+                datasets: [{
+                    data: [{{ stats.bookmarks_on_my_notes }}, {{ stats.total_downloads }}, 5],
+            backgroundColor: ['#4f46e5', '#06b6d4', '#8b5cf6']
+        }]
+        },
+        options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+    }
+    });
+});
+</script>
+{% endif %}
+
+<div class="card"
+    style="margin-bottom: var(--spacing-xl); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+    <h3 style="margin-bottom: 15px;">Search Resources</h3>
+    <form method="get" action="{% url 'resource_list' %}"
+        style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1; min-width: 200px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Keyword</label>
+            <input type="text" name="q" placeholder="Enter title, subject..."
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        </div>
+        <div style="width: 150px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Department</label>
+            <input type="text" name="department" placeholder="CSE, ECE..."
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+        </div>
+        <div style="width: 100px;">
+            <label style="display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600;">Semester</label>
+            <select name="semester"
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
+                <option value="">All</option>
+                {% for i in "12345678"|make_list %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="height: 42px;">Search Resources</button>
+    </form>
+</div>
+
+<h3 style="margin-bottom: var(--spacing-md);">Recent Resources</h3>
+<div class="resource-grid">
+    {% for it in recent_resources %}
+    <div class="card resource-card">
+        <a class="linkcard" href="/resources/{{ it.id }}/">
+            <h3 class="resource-title">{{ it.title }}</h3>
+            <p class="muted">{{ it.department }} • Sem {{ it.semester }}</p>
+            <span class="tag">{{ it.resource_type }}</span>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
