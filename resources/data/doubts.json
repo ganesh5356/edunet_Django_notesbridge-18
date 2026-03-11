@@ -1,5 +1,17 @@
 [
   {
+    "id": "6637905b5d254286b40c9a0be690f470",
+    "question": "what is java",
+    "asked_by": "dhanush",
+    "replies": [
+      {
+        "user": "kumar",
+        "message": "Java is a popular, high-level, and object-oriented programming language designed by Sun Microsystems (now Oracle) in 1995. It is designed to be platform-independent, meaning code written once can run on any device (computer, phone, server) equipped with a Java Virtual Machine (JVM). It is widely used for web, mobile, and enterprise applications."
+      }
+    ],
+    "resolved": true
+  },
+  {
     "id": "1f48fb80c3d1476ca81c4f96222c16ab",
     "question": "what is pyhton",
     "asked_by": "dhanush",
@@ -51,8 +63,12 @@
       {
         "user": "kumar",
         "message": "hi"
+      },
+      {
+        "user": "kumar",
+        "message": "hello"
       }
     ],
-    "resolved": false
+    "resolved": true
   }
 ]

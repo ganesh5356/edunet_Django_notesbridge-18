@@ -39,6 +39,7 @@
                     {% endif %}
                     {% if role     ==   "senior" %}
                     <li><a href="/resources/upload/">Upload Resource</a></li>
+                    <li><a href="{% url 'resource_list' %}?mine=1">My uploads ({{ my_uploads_count|default:0 }})</a></li>
                     {% endif %}
                 </ul>
             </nav>

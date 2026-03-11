@@ -29,11 +29,38 @@ document.addEventListener('DOMContentLoaded', function () {
         appendMessage(text, 'user');
         input.value = '';
 
-        // Simulate thinking and then respond using knowledge base
-        setTimeout(() => {
-            const response = getChatResponse(text);
-            appendMessage(response, 'bot');
-        }, 300);
+        // Show typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot typing';
+        typingDiv.textContent = 'Typing...';
+        messagesContainer.appendChild(typingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Send to backend
+        fetch('/ask-anything/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ message: text })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Remove typing indicator
+            messagesContainer.removeChild(typingDiv);
+
+            if (data.status === 'success') {
+                appendMessage(data.response, 'bot');
+            } else {
+                appendMessage('⚠️ ' + data.message, 'bot');
+            }
+        })
+        .catch(error => {
+            // Remove typing indicator
+            messagesContainer.removeChild(typingDiv);
+            appendMessage('⚠️ Sorry, there was an error processing your request.', 'bot');
+        });
     }
 
     function appendMessage(text, side) {

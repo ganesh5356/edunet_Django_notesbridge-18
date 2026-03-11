@@ -3,8 +3,12 @@
 
 <div class="page-head mb-md">
     <h2>Resources</h2>
+    {% if request.GET.mine and role == "senior" %}
+    <p class="muted">Showing only your uploads</p>
+    {% endif %}
 </div>
 
+{% if not request.GET.mine or role != "senior" %}
 <div class="card mb-xl p-lg border">
     <form method="get" class="flex flex-wrap flex-end gap-md">
         <div class="flex-1 min-w-200">
@@ -37,6 +41,7 @@
         <a href="{% url 'resource_list' %}" class="btn h-42 flex flex-center border">Clear</a>
     </form>
 </div>
+{% endif %}
 
 {% if items %}
 
@@ -58,11 +63,11 @@
 
         </a>
 
-        {% if role   ==  "junior" %}
+        {% if role == "junior" %}
 
         {% for b in bookmarks %}
 
-        {% if b.user   ==  request.user.username and b.resource_id == it.id %}
+        {% if b.user == request.user.username and b.resource_id == it.id %}
 
         <a class="btn" href="/resources/remove-bookmark/{{ it.id }}/">
             ⭐ Bookmarked
@@ -74,6 +79,14 @@
 
         <a class="btn btn-primary" href="/resources/bookmark/{{ it.id }}/">
             ⭐ Bookmark
+        </a>
+
+        {% endif %}
+
+        {% if role == "senior" and it.uploaded_by == request.user.username %}
+
+        <a class="btn btn-danger" href="/resources/delete/{{ it.id }}/" onclick="return confirm('Are you sure you want to delete this resource?')">
+            🗑️ Delete
         </a>
 
         {% endif %}

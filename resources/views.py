@@ -37,6 +37,11 @@ def resource_list(request):
 
     items = load_resources()
     bookmarks = load_bookmarks()
+    role = _user_role(request)
+
+    # if senior has clicked "my uploads" link, restrict to their resources
+    if request.GET.get("mine") and role == "senior":
+        items = [it for it in items if it.get("uploaded_by") == request.user.username]
 
     q = (request.GET.get("q", "") or "").lower()
     dept = (request.GET.get("department", "") or "").lower()
@@ -64,7 +69,7 @@ def resource_list(request):
         "resources/list.html",
         {
             "items": filtered,
-            "role": _user_role(request),
+            "role": role,
             "bookmarks": bookmarks
         }
     )
@@ -195,6 +200,34 @@ def remove_bookmark(request, rid):
     save_bookmarks(bookmarks)
 
     messages.success(request, "Bookmark removed!")
+
+    return redirect("resource_list")
+
+
+@login_required
+def delete_resource(request, rid):
+
+    role = _user_role(request)
+
+    items = load_resources()
+    match = None
+    for it in items:
+        if it.get("id") == rid:
+            match = it
+            break
+
+    if not match:
+        raise Http404("Resource not found")
+
+    if role != "senior" or match.get("uploaded_by") != request.user.username:
+        messages.error(request, "Only the senior who uploaded the resource can delete it.")
+        return redirect("resource_list")
+
+    items = [it for it in items if it.get("id") != rid]
+
+    save_resources(items)
+
+    messages.success(request, "Resource deleted successfully!")
 
     return redirect("resource_list")
 

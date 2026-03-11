@@ -84,4 +84,4 @@ LOGOUT_REDIRECT_URL = "home"
 
 
 # Gemini API Key
-GEMINI_API_KEY = "AIzaSyBxVGPxw0Gw-vp6NzozWQJ3YXchrCXEh0w" # User will integrate API key here
+GEMINI_API_KEY = "AIzaSyBjhsx2_BnFK-6FXcQ6NHApV7u5uq6KKr0" # User will integrate API key here
