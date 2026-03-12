@@ -21,3 +21,6 @@ media/
 
 # OS files
 .DS_Store
+
+#ignore media
+media/
