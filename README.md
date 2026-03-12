@@ -106,5 +106,6 @@ Visit `http://127.0.0.1:8000/` to start exploring!
 We welcome contributions! Please feel free to submit Pull Requests or open issues for feature requests and bug reports.
 
 ---
+"Thank you".
 
 *NotesBridge - Empowering students through collective knowledge.*
