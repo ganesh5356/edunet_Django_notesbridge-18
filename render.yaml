@@ -2,7 +2,7 @@ services:
   - type: web
     name: notesbridge
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
     startCommand: "gunicorn notesbridge.wsgi:application"
     envVars:
       - key: SECRET_KEY
@@ -15,6 +15,10 @@ services:
         value: "3.11.0"
       - key: GEMINI_API_KEY
         sync: false   # Set this manually in the Render dashboard
+      - key: DATABASE_URL
+        fromDatabase:
+          name: notesbridge-db
+          property: connectionString
     plan: free
 
 databases:
