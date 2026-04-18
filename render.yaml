@@ -2,7 +2,7 @@ services:
   - type: web
     name: notesbridge
     runtime: python
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
+    buildCommand: "./build.sh"
     startCommand: "gunicorn notesbridge.wsgi:application"
     envVars:
       - key: SECRET_KEY
