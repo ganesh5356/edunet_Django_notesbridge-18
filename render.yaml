@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: notesbridge
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn notesbridge.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: GEMINI_API_KEY
+        sync: false   # Set this manually in the Render dashboard
+    plan: free
+
+databases:
+  - name: notesbridge-db
+    databaseName: notesbridge
+    user: notesbridge
+    plan: free
